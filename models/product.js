@@ -42,6 +42,10 @@ const ProductSchema = new Schema({
             required: true,
         }
     ],
+    stock: {
+        type: Boolean,
+        required: true
+    },
 
   url: {
     type: String,
@@ -51,3 +55,6 @@ const ProductSchema = new Schema({
 
 const Product = mongoose.model("Product", ProductSchema);
 module.exports = Product;
+
+
+/* Paleta Full Carbono, Nucleo Foam/Soft, Paleta para jugadores Intermedios/Avanzados, Control con potencia, Peso de 360-375*/

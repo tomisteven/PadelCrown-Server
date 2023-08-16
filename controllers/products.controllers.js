@@ -27,11 +27,25 @@ const editProduct = async (req, res) => {
       res.send(product);
 }
 
+const allStock = async (req, res) => {
+
+    const products = await Products.find();
+    if(!products) return res.status(204).json()
+    products.map(async (product) => {
+        product.stock = true;
+        await product.save();
+    })
+    res.json(products);
+
+
+}
+
 
 
 
 module.exports = {
     createProduct,
     getProducts,
-    editProduct
+    editProduct,
+    allStock
 }
