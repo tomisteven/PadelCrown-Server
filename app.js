@@ -20,9 +20,9 @@ app.use(cookieParser());
 app.use(cors());
 
 //archivos estaticos a la carpeta uploads
-app.use(express.static("./uploads"));
+/* app.use(express.static("./uploads")); */
 
 //rutas
-app.use(`/crown`, productsRoutes); //rutas de usuario
+app.use(`/`, productsRoutes); //rutas de usuario
 
 module.exports = app;
