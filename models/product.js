@@ -28,28 +28,32 @@ const ProductSchema = new Schema({
     {
         type: String,
         required: true,
+        default: "Redonda",
     }
   ],
   nucleo: [
     {
         type: String,
         required: true,
+        default: "Foam",
     }
     ],
     balance: [
         {
             type: String,
             required: true,
+            default: "Medio",
         }
     ],
     stock: {
         type: Boolean,
-        required: true
+        default: true,
     },
 
   url: {
     type: String,
     required: true,
+    default:"https://padelcrown.com.ar/"
   },
 });
 
