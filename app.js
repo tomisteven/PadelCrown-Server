@@ -1,5 +1,6 @@
 const express = require("express");
 const productsRoutes = require("./routes/products.router");
+const revendedoresRoutes = require("./routes/revendedores.router");
 var cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -24,5 +25,6 @@ app.use(cors());
 
 //rutas
 app.use(`/`, productsRoutes); //rutas de usuario
+app.use(`/revendedores`, revendedoresRoutes); //rutas de usuario
 
 module.exports = app;
