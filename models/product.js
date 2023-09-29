@@ -60,6 +60,11 @@ const ProductSchema = new Schema({
     required: true,
     default: 1,
   },
+  mercadoLibre: {
+    type: Boolean,
+    default: false,
+  },
+  urlMl : String,
 });
 
 const Product = mongoose.model("Product", ProductSchema);
