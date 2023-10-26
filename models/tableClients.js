@@ -37,6 +37,9 @@ const ClientSchema = new Schema({
   costo: {
     type: Number,
   },
+  ganancia: {
+    type: Number
+  },
   envio: {
     type: Number,
   },

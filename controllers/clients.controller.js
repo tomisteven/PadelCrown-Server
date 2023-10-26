@@ -1063,6 +1063,8 @@ const clientesAnteriores = [
 
 const createClient = async (req, res) => {
   const client = req.body;
+  const ganancia = client.precio - client.costo - client.envio;
+  client.ganancia = ganancia;
   const newClient = new Client(client);
   try {
     await newClient.save();
@@ -1080,6 +1082,16 @@ const crearClientesExistentes = async (req, res) => {
     res.status(409).json({ message: error.message });
   }
 };
+
+const editGananciasAll = async (req, res) => {
+  const clients = await Client.find();
+  clients.forEach((client) => {
+    const ganancia = client.precio - client.costo - client.envio;
+    client.ganancia = ganancia;
+    client.save();
+  });
+  res.send(clients);
+}
 
 const getClients = async (req, res) => {
   try {
@@ -1121,4 +1133,5 @@ module.exports = {
   editClient,
   deleteClient,
   crearClientesExistentes,
+  editGananciasAll,
 };
