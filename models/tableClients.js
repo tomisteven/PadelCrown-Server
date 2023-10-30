@@ -52,16 +52,25 @@ const ClientSchema = new Schema({
   valorCarbono: {
     type: Number,
   },
-  notas: {
+  comentarios: {
     type: String,
   },
   linkSeguimiento: {
     type: String,
   },
-  estado: {
-    type: String,
-    default: "Pendiente",
-  },
+  estadoPedido: [
+    {
+      estado: {
+        type: String,
+        default: "Confirmado",
+      },
+      fecha: {
+        type: Date,
+        default: Date.now(),
+      },
+    }
+  ]
+
 });
 
 module.exports = mongoose.model("Client", ClientSchema);
