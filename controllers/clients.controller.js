@@ -90,6 +90,7 @@ const updateEstadoPedido = async (req, res) => {
   if (!user) return res.status(204).json();
 
   user.estadoPedido.push({estado: estado});
+  user.estado = estado;
   await user.save();
 
   res.send(user);
