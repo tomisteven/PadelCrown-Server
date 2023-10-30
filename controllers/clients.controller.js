@@ -53,7 +53,7 @@ const editClient = async (req, res) => {
   Object.keys(body).forEach((key) => {
     client[key] = body[key];
   });
-  await product.save();
+  await client.save();
   res.send(client);
 };
 
@@ -81,6 +81,15 @@ const updateEstadoPedido = async (req, res) => {
   res.send(user);
 }
 
+const addStateDefault = async (req, res) => {
+  const clients = await Client.find();
+  clients.forEach((client) => {
+    client.estadoPedido.push({estado: "Confirmado"});
+    client.save();
+  });
+  res.send(clients);
+}
+
 module.exports = {
   createClient,
   getClients,
@@ -89,4 +98,5 @@ module.exports = {
   crearClientesExistentes,
   editGananciasAll,
   updateEstadoPedido,
+  addStateDefault
 };
