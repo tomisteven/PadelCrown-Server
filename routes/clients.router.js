@@ -1,6 +1,6 @@
 const Router = require("express");
 
-const { createClient, getClients, editClient, deleteClient, crearClientesExistentes, editGananciasAll, updateEstadoPedido, addStateDefault } = require("../controllers/clients.controller");
+const { createClient, getClients, editClient, deleteClient, crearClientesExistentes, editGananciasAll, updateEstadoPedido, addStateDefault, getOneClient } = require("../controllers/clients.controller");
 const { autenticacion } = require("../middlewares/autenticacion.js");
 
 const router = Router()
@@ -8,6 +8,7 @@ const router = Router()
 
 
 router.get("/", [autenticacion],  getClients)
+router.get("/:id", [autenticacion],  getOneClient)
 router.post("/create", [autenticacion] , createClient);
 router.patch("/update/:id",[autenticacion] ,editClient);
 router.delete("/delete/:id" ,deleteClient);

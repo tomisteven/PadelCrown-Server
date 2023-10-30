@@ -43,6 +43,17 @@ const getClients = async (req, res) => {
   }
 };
 
+const getOneClient = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const client = await Client.findById(id);
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+
 const editClient = async (req, res) => {
   const { id } = req.params;
   const body = req.body;
@@ -98,5 +109,6 @@ module.exports = {
   crearClientesExistentes,
   editGananciasAll,
   updateEstadoPedido,
-  addStateDefault
+  addStateDefault,
+  getOneClient
 };
