@@ -64,6 +64,9 @@ const editClient = async (req, res) => {
   Object.keys(body).forEach((key) => {
     client[key] = body[key];
   });
+
+  client.ganancia = client.precio - client.costo - client.envio;
+
   await client.save();
   res.send(client);
 };
