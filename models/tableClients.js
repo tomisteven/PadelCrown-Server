@@ -58,6 +58,10 @@ const ClientSchema = new Schema({
   linkSeguimiento: {
     type: String,
   },
+  estado: {
+    type: String,
+    default: "Confirmado",
+  },
   estadoPedido: [
     {
       estado: {

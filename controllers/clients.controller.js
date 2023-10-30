@@ -85,15 +85,14 @@ const deleteClient = async (req, res) => {
 const updateEstadoPedido = async (req, res) => {
   const { id } = req.params;
   const { estado } = req.body;
-
   const user = await Client.findById(id);
   if (!user) return res.status(204).json();
 
-  user.estadoPedido.push({estado: estado});
   user.estado = estado;
+  user.estadoPedido.push({estado: estado});
   await user.save();
 
-  res.send(user);
+  res.json(user);
 }
 
 const addStateDefault = async (req, res) => {
