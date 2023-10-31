@@ -73,6 +73,17 @@ const ClientSchema = new Schema({
         default: Date.now(),
       },
     }
+  ],
+  comentarios : [
+    {
+      comentario: {
+        type: String,
+      },
+      fecha: {
+        type: Date,
+        default: Date.now(),
+      },
+    }
   ]
 
 });

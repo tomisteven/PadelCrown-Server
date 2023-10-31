@@ -1,7 +1,5 @@
 const Client = require("../models/tableClients");
 
-
-
 const createClient = async (req, res) => {
   const client = req.body;
   const ganancia = client.precio - client.costo - client.envio;
@@ -32,7 +30,7 @@ const editGananciasAll = async (req, res) => {
     client.save();
   });
   res.send(clients);
-}
+};
 
 const getClients = async (req, res) => {
   try {
@@ -52,7 +50,7 @@ const getOneClient = async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
-}
+};
 
 const editClient = async (req, res) => {
   const { id } = req.params;
@@ -89,20 +87,32 @@ const updateEstadoPedido = async (req, res) => {
   if (!user) return res.status(204).json();
 
   user.estado = estado;
-  user.estadoPedido.push({estado: estado});
+  user.estadoPedido.push({ estado: estado });
   await user.save();
 
   res.json(user);
-}
+};
 
 const addStateDefault = async (req, res) => {
   const clients = await Client.find();
   clients.forEach((client) => {
-    client.estadoPedido.push({estado: "Confirmado"});
+    client.estadoPedido.push({ estado: "Confirmado" });
     client.save();
   });
   res.send(clients);
-}
+};
+
+const addComentario = async (req, res) => {
+  const { id } = req.params;
+  const { comentario } = req.body;
+  const clients = await Client.findById(id);
+  if (!clients) return res.status(204).json();
+
+  clients.comentarios.push({ comentario: comentario });
+  await clients.save();
+
+  res.json(clients);
+};
 
 module.exports = {
   createClient,
@@ -113,5 +123,6 @@ module.exports = {
   editGananciasAll,
   updateEstadoPedido,
   addStateDefault,
-  getOneClient
+  getOneClient,
+  addComentario,
 };
