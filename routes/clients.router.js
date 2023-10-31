@@ -1,6 +1,6 @@
 const Router = require("express");
 
-const { createClient, getClients, editClient, deleteClient, crearClientesExistentes, editGananciasAll, updateEstadoPedido, addStateDefault, getOneClient, addComentario } = require("../controllers/clients.controller");
+const { createClient, getClients, editClient, deleteClient, crearClientesExistentes, editGananciasAll, updateEstadoPedido, addStateDefault, getOneClient, addComentario, addComentarioAll } = require("../controllers/clients.controller");
 const { autenticacion } = require("../middlewares/autenticacion.js");
 
 const router = Router()
@@ -17,6 +17,7 @@ router.patch("/updateganancias/",[autenticacion] ,editGananciasAll);
 router.post("/estado/:id",[autenticacion] ,updateEstadoPedido);
 router.post("/estado",[autenticacion] ,addStateDefault);
 router.post("/comentario/:id",[autenticacion] ,addComentario);
+router.post("/comentariosall",[autenticacion] ,addComentarioAll);
 
 
 module.exports = router;

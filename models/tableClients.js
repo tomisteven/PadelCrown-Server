@@ -38,7 +38,7 @@ const ClientSchema = new Schema({
     type: Number,
   },
   ganancia: {
-    type: Number
+    type: Number,
   },
   envio: {
     type: Number,
@@ -72,21 +72,19 @@ const ClientSchema = new Schema({
         type: Date,
         default: Date.now(),
       },
-    }
+    },
   ],
-  comentarios : [
+  comentarios: [
     {
       comentario: {
         type: String,
-        default: "Confirmado",
       },
       fecha: {
         type: Date,
         default: Date.now(),
       },
-    }
-  ]
-
+    },
+  ],
 });
 
 module.exports = mongoose.model("Client", ClientSchema);

@@ -114,6 +114,15 @@ const addComentario = async (req, res) => {
   res.json(clients);
 };
 
+const addComentarioAll = async (req, res) => {
+  const clients = await Client.find();
+  clients.forEach((client) => {
+    client.comentarios.push({ comentario: "Sin comentarios" });
+    client.save();
+  });
+  res.send(clients);
+};
+
 module.exports = {
   createClient,
   getClients,
@@ -125,4 +134,5 @@ module.exports = {
   addStateDefault,
   getOneClient,
   addComentario,
+  addComentarioAll,
 };
