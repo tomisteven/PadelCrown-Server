@@ -63,7 +63,7 @@ const editClient = async (req, res) => {
     client[key] = body[key];
   });
 
-  client.ganancia = client.precio - client.costo - client.envio;
+  client.ganancia = client.precio - client.costo - client.envio - client.valorCarbono
 
   await client.save();
   res.send(client);
