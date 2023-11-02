@@ -5,7 +5,7 @@ const createClient = async (req, res) => {
   const ganancia = client.precio - client.costo - client.envio;
   client.ganancia = ganancia;
 
-  body.estadoPedido ? client.estado = body.estadoPedido[0].estado : client.estado = "Confirmado"
+  req.body.estadoPedido ? client.estado = req.body.estadoPedido[0].estado : client.estado = "Confirmado"
   const newClient = new Client(client);
   try {
     await newClient.save();
