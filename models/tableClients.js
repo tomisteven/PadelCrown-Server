@@ -23,7 +23,7 @@ const ClientSchema = new Schema({
     type: String,
   },
   dni: {
-    type: String,
+    type: Number
   },
   direccion: {
     type: String,
