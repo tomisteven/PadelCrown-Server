@@ -2,7 +2,7 @@ const Client = require("../models/tableClients");
 
 const createClient = async (req, res) => {
   const client = req.body;
-  const ganancia = client.precio - client.costo - client.envio;
+  const ganancia = client.precio - client.costo - client.envio - client.valorCarbono;
   client.ganancia = ganancia;
 
   req.body.estadoPedido ? client.estado = req.body.estadoPedido[0].estado : client.estado = "Confirmado"
