@@ -5,7 +5,7 @@ const findClient = async (req, res) => {
 
   try {
     const clients = await Client.find({ dni: dni });
-    res.status(200).json({estado : clients[0].estadoPedido, cliente:  clients[0].nombre, fecha: clients[0].fechaCompra, pedido : clients[0].producto})
+    res.status(200).json({estado : clients[0].estadoPedido, cliente:  clients[0].nombre, fecha: clients[0].fechaCompra, pedido : clients[0].producto, link: clients[0].linkSeguimiento})
   } catch (error) {
     res.status(404).json({ message: "No se encontro a ninguna persona con ese DNI." });
   }
