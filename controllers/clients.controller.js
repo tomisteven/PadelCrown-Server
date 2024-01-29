@@ -1,12 +1,18 @@
 const Client = require("../models/tableClients");
+const TimeAgo = require("javascript-time-ago/locale/es");
 
 const createClient = async (req, res) => {
   const client = req.body;
-  const ganancia = client.precio - client.costo - client.envio - client.valorCarbono;
+  const ganancia =
+    client.precio - client.costo - client.envio - client.valorCarbono;
   client.ganancia = ganancia;
 
-  req.body.estadoPedido ? client.estado = req.body.estadoPedido[0].estado : client.estado = "Confirmado"
+  req.body.estadoPedido
+    ? (client.estado = req.body.estadoPedido[0].estado)
+    : (client.estado = "Confirmado");
+
   const newClient = new Client(client);
+
   try {
     await newClient.save();
     res.status(201).json(newClient);
@@ -65,7 +71,8 @@ const editClient = async (req, res) => {
     client[key] = body[key];
   });
 
-  client.ganancia = client.precio - client.costo - client.envio - client.valorCarbono
+  client.ganancia =
+    client.precio - client.costo - client.envio - client.valorCarbono;
 
   await client.save();
   res.send(client);
@@ -125,6 +132,18 @@ const addComentarioAll = async (req, res) => {
   res.send(clients);
 };
 
+const deleteLinkSeguimiento = async (req, res) => {
+  const { id } = req.params;
+  const { link } = req.body;
+  const clients = await Client.findById(id);
+  if (!clients) return res.status(204).json();
+
+  clients.linkSeguimiento = "";
+  await clients.save();
+
+  res.json({ message: "Link eliminado correctamente" });
+};
+
 module.exports = {
   createClient,
   getClients,
@@ -137,4 +156,5 @@ module.exports = {
   getOneClient,
   addComentario,
   addComentarioAll,
+  deleteLinkSeguimiento,
 };
