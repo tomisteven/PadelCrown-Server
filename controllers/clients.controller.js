@@ -2,14 +2,21 @@ const Client = require("../models/tableClients");
 const TimeAgo = require("javascript-time-ago/locale/es");
 
 const createClient = async (req, res) => {
-  const client = req.body;
+  console.log(req.body);
+   const client = req.body;
   const ganancia =
     client.precio - client.costo - client.envio - client.valorCarbono;
   client.ganancia = ganancia;
 
-  req.body.estadoPedido
-    ? (client.estado = req.body.estadoPedido[0].estado)
-    : (client.estado = "Confirmado");
+  /* //si en el cliente no viene ningun estado, se le asigna el estado "Confirmado" por defecto
+  if (!client.estadoPedido) {
+    client.estado = "Confirmado";
+    client.estadoPedido = [
+      { estado: "Confirmado", fecha: new Date().toLocaleDateString() },
+    ];
+  } else {
+    client.estadoPedido[0].fecha = new Date().toLocaleDateString();
+  } */
 
   const newClient = new Client(client);
 
@@ -94,8 +101,6 @@ const updateEstadoPedido = async (req, res) => {
   const { estado, fecha } = req.body;
   const user = await Client.findById(id);
   if (!user) return res.status(204).json();
-
-  //console.log(req.body);
 
   user.estado = estado;
   console.log({ estado: estado, fecha: fecha });
