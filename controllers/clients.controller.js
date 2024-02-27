@@ -91,14 +91,17 @@ const deleteClient = async (req, res) => {
 
 const updateEstadoPedido = async (req, res) => {
   const { id } = req.params;
-  const { estado } = req.body;
+  const { estado, fecha } = req.body;
   const user = await Client.findById(id);
   if (!user) return res.status(204).json();
 
-  user.estado = estado;
-  user.estadoPedido.push({ estado: estado });
-  await user.save();
+  //console.log(req.body);
 
+  user.estado = estado;
+  console.log({ estado: estado, fecha: fecha });
+  user.estadoPedido.push({ estado: estado, fecha: fecha });
+  await user.save();
+  console.log(user.estadoPedido);
   res.json(user);
 };
 

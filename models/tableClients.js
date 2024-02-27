@@ -71,10 +71,7 @@ const ClientSchema = new Schema({
         type: String,
         default: "Confirmado",
       },
-      fecha: {
-        type: Date,
-        default: Date(),
-      },
+      fecha: String
     },
   ],
   comentarios: [
