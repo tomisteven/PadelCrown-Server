@@ -1,4 +1,5 @@
 const Client = require("../models/tableClients");
+const Eliminado = require("../models/eliminados");
 const TimeAgo = require("javascript-time-ago/locale/es");
 const fs = require("fs").promises;
 
@@ -79,40 +80,40 @@ const editClient = async (req, res) => {
 const deleteClient = async (req, res) => {
   const { id } = req.params;
   try {
-    const client = await Client.findByIdAndRemove(id);
-    if (!client) return res.status(204).json();
-    await guardarClienteEliminado(client);
+    await guardarClienteELiminado(id);
+    await Client.findByIdAndDelete(id);
     res.status(200).json({ message: "Cliente eliminado correctamente" });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 };
-const guardarClienteEliminado = async (client) => {
-  const archivo = 'eliminados.json';
+
+ const guardarClienteELiminado = async (client) => {
+  const cliente = await Client.findById(client)
+  const eliminado =  new Eliminado({
+    nombre: cliente.nombre,
+    apellido: cliente.apellido,
+    telefono: cliente.telefono,
+    direccion: cliente.direccion,
+    localidad: cliente.localidad,
+    provincia: cliente.provincia,
+    precio: cliente.precio,
+    costo: cliente.costo,
+    ganancia: cliente.ganancia,
+    formaPago: cliente.formaPago,
+    comentarios: cliente.comentarios,
+    linkSeguimiento: cliente.linkSeguimiento,
+    estado: cliente.estado,
+    estadoPedido: cliente.estadoPedido,
+  });
   try {
-    let clientesEliminados = [];
-
-    // Leer el contenido actual del archivo, si existe
-    try {
-      const contenido = await fs.readFile(archivo, 'utf-8');
-      clientesEliminados = JSON.parse(contenido);
-    } catch (error) {
-      if (error.code !== 'ENOENT') {
-        throw error;
-      }
-    }
-
-    // Agregar el cliente eliminado al array
-    clientesEliminados.push(client);
-
-    // Escribir el array actualizado en el archivo JSON
-    await fs.writeFile(archivo, JSON.stringify(clientesEliminados, null, 2));
-    console.log('Cliente eliminado guardado correctamente en el archivo:', archivo);
+    await eliminado.save();
   } catch (error) {
-    console.error('Error al guardar el cliente eliminado:', error);
-    throw error;
+    console.log(error);
   }
-};
+
+}
+
 
 const updateEstadoPedido = async (req, res) => {
   const { id } = req.params;
