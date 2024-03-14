@@ -1,22 +1,13 @@
 const Client = require("../models/tableClients");
 const TimeAgo = require("javascript-time-ago/locale/es");
+const fs = require("fs").promises;
 
 const createClient = async (req, res) => {
   console.log(req.body);
-   const client = req.body;
+  const client = req.body;
   const ganancia =
     client.precio - client.costo - client.envio - client.valorCarbono;
   client.ganancia = ganancia;
-
-  /* //si en el cliente no viene ningun estado, se le asigna el estado "Confirmado" por defecto
-  if (!client.estadoPedido) {
-    client.estado = "Confirmado";
-    client.estadoPedido = [
-      { estado: "Confirmado", fecha: new Date().toLocaleDateString() },
-    ];
-  } else {
-    client.estadoPedido[0].fecha = new Date().toLocaleDateString();
-  } */
 
   const newClient = new Client(client);
 
@@ -87,12 +78,39 @@ const editClient = async (req, res) => {
 
 const deleteClient = async (req, res) => {
   const { id } = req.params;
-
   try {
-    await Client.findByIdAndDelete(id);
+    const client = await Client.findByIdAndRemove(id);
+    if (!client) return res.status(204).json();
+    await guardarClienteEliminado(client);
     res.status(200).json({ message: "Cliente eliminado correctamente" });
   } catch (error) {
     res.status(404).json({ message: error.message });
+  }
+};
+const guardarClienteEliminado = async (client) => {
+  const archivo = 'eliminados.json';
+  try {
+    let clientesEliminados = [];
+
+    // Leer el contenido actual del archivo, si existe
+    try {
+      const contenido = await fs.readFile(archivo, 'utf-8');
+      clientesEliminados = JSON.parse(contenido);
+    } catch (error) {
+      if (error.code !== 'ENOENT') {
+        throw error;
+      }
+    }
+
+    // Agregar el cliente eliminado al array
+    clientesEliminados.push(client);
+
+    // Escribir el array actualizado en el archivo JSON
+    await fs.writeFile(archivo, JSON.stringify(clientesEliminados, null, 2));
+    console.log('Cliente eliminado guardado correctamente en el archivo:', archivo);
+  } catch (error) {
+    console.error('Error al guardar el cliente eliminado:', error);
+    throw error;
   }
 };
 
