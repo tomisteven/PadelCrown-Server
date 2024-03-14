@@ -49,6 +49,10 @@ const ClientSchema = new Schema({
   formaPago: {
     type: String,
   },
+  eliminado : {
+    type: Boolean,
+    default: false,
+  },
   comisionVendedor: {
     type: Number,
   },

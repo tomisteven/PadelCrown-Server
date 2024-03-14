@@ -20,6 +20,15 @@ const createClient = async (req, res) => {
   }
 };
 
+const addStateEliminado = async (req, res) => {
+  const clientes = await Client.find();
+  clientes.forEach((cliente) => {
+    cliente.eliminado = false;
+    cliente.save();
+  });
+  res.send(clientes);
+};
+
 const crearClientesExistentes = async (req, res) => {
   try {
     await Client.insertMany(clientesAnteriores);
@@ -42,7 +51,10 @@ const editGananciasAll = async (req, res) => {
 const getClients = async (req, res) => {
   try {
     const clients = await Client.find();
-    res.status(200).json(clients);
+    const clientsThatAreNotDeleted = clients.filter(
+      (client) => client.eliminado === false
+    );
+    res.status(200).json(clientsThatAreNotDeleted);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -54,6 +66,26 @@ const getOneClient = async (req, res) => {
   try {
     const client = await Client.findById(id);
     res.status(200).json(client);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+const restoreClient = async (req, res) => {
+  const { id } = req.params;
+  const client = await Client.findById(id);
+  if (!client) return res.status(204).json();
+
+  client.eliminado = false;
+  await client.save();
+  res.status(200).json({ message: "Cliente restaurado correctamente" });
+};
+
+const deleteClientPermanently = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Client.findByIdAndDelete(id);
+    res.status(200).json({ message: "Cliente eliminado correctamente" });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -80,8 +112,9 @@ const editClient = async (req, res) => {
 const deleteClient = async (req, res) => {
   const { id } = req.params;
   try {
-    await guardarClienteELiminado(id);
-    await Client.findByIdAndDelete(id);
+    const client = await Client.findById(id);
+    client.eliminado = true;
+    await client.save();
     res.status(200).json({ message: "Cliente eliminado correctamente" });
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -90,14 +123,17 @@ const deleteClient = async (req, res) => {
 
 const getClientsEliminados = async (req, res) => {
   try {
-    const clients = await Eliminado.find();
-    res.status(200).json(clients);
+    const clients = await Client.find();
+    const clientsThatAreDeleted = clients.filter(
+      (client) => client.eliminado === true
+    );
+    res.status(200).json(clientsThatAreDeleted);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 };
 
- const guardarClienteELiminado = async (client) => {
+/* const guardarClienteELiminado = async (client) => {
   const cliente = await Client.findById(client)
   const eliminado =  new Eliminado({
     nombre: cliente.nombre,
@@ -122,8 +158,7 @@ const getClientsEliminados = async (req, res) => {
     console.log(error);
   }
 
-}
-
+} */
 
 const updateEstadoPedido = async (req, res) => {
   const { id } = req.params;
@@ -195,4 +230,7 @@ module.exports = {
   addComentarioAll,
   deleteLinkSeguimiento,
   getClientsEliminados,
+  addStateEliminado,
+  restoreClient,
+  deleteClientPermanently,
 };
