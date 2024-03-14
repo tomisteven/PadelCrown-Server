@@ -101,6 +101,7 @@ const getClientsEliminados = async (req, res) => {
   const cliente = await Client.findById(client)
   const eliminado =  new Eliminado({
     nombre: cliente.nombre,
+    producto: cliente.producto,
     apellido: cliente.apellido,
     telefono: cliente.telefono,
     direccion: cliente.direccion,
