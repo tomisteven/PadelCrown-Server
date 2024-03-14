@@ -88,6 +88,15 @@ const deleteClient = async (req, res) => {
   }
 };
 
+const getClientsEliminados = async (req, res) => {
+  try {
+    const clients = await Eliminado.find();
+    res.status(200).json(clients);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
  const guardarClienteELiminado = async (client) => {
   const cliente = await Client.findById(client)
   const eliminado =  new Eliminado({
@@ -184,4 +193,5 @@ module.exports = {
   addComentario,
   addComentarioAll,
   deleteLinkSeguimiento,
+  getClientsEliminados,
 };
