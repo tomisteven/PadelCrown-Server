@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGO_URL,
             throw err;
         }else{
             console.log("La conexion a la base de datos es correcta");
-            app.listen(process.env.PORT || 8080, () => {
+            app.listen(process.env.PORT || 8081, () => {
                 console.log("#####################");
                 console.log("##### API REST #####");
                 console.log("#####################");

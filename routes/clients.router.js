@@ -1,6 +1,6 @@
 const Router = require("express");
 
-const { createClient, getClients, editClient, deleteClient, crearClientesExistentes, editGananciasAll, updateEstadoPedido, addStateDefault, getOneClient, addComentario, addComentarioAll, deleteLinkSeguimiento, getClientsEliminados, addStateEliminado, restoreClient, deleteClientPermanently  } = require("../controllers/clients.controller");
+const { createClient, getClients, editClient, deleteClient, crearClientesExistentes, editGananciasAll, updateEstadoPedido, addStateDefault, getOneClient, addComentario, addComentarioAll, deleteLinkSeguimiento, getClientsEliminados, addStateEliminado, restoreClient, deleteClientPermanently,deleteAllClientPermanently  } = require("../controllers/clients.controller");
 const { autenticacion } = require("../middlewares/autenticacion.js");
 
 const router = Router()
@@ -11,6 +11,7 @@ router.get("/", [autenticacion],  getClients)
 router.get("/eliminados", [autenticacion],  getClientsEliminados)
 router.patch("/restore/:id", [autenticacion], restoreClient  );
 router.delete("/delete/:id/permanently", [autenticacion], deleteClientPermanently );
+router.get("/delete/all/permanently", [autenticacion], deleteAllClientPermanently );
 router.post("/eliminados/e", [autenticacion], addStateEliminado );
 router.get("/:id", [autenticacion],  getOneClient)
 router.post("/create", [autenticacion] , createClient);

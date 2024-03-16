@@ -1,22 +1,78 @@
 const Client = require("../models/tableClients");
 const Eliminado = require("../models/eliminados");
 const TimeAgo = require("javascript-time-ago/locale/es");
-const fs = require("fs").promises;
+const nodemailer = require("nodemailer");
+const fs = require("fs");
 
 const createClient = async (req, res) => {
   console.log(req.body);
   const client = req.body;
+  const email = client.email;
   const ganancia =
     client.precio - client.costo - client.envio - client.valorCarbono;
   client.ganancia = ganancia;
 
   const newClient = new Client(client);
 
+  email && sendEmail(client);
+
   try {
     await newClient.save();
     res.status(201).json(newClient);
   } catch (error) {
     res.status(409).json({ message: error.message });
+  }
+};
+
+const sendEmail = async (cliente) => {
+  try {
+    // Leer el contenido del archivo HTML
+    const html = fs.readFileSync("./email.html", "utf8");
+
+    // Reemplazar los marcadores de posición en el HTML con los valores del cliente
+    const replacedHTML = html
+      .replace("{{ cliente.nombre }}", cliente.nombre)
+      .replace("{{ cliente.fechaCompra }}", cliente.fechaCompra)
+      .replace("{{ cliente.dni2 }}", cliente.dni)
+      .replace("{{ cliente.dni }}", cliente.dni)
+      .replace("{{ cliente.producto }}", cliente.producto)
+      .replace("{{ cliente.precio }}", cliente.precio)
+      .replace("{{ cliente.direccion }}", cliente.direccion)
+      .replace("{{ cliente.provincia }}", cliente.provincia);
+
+    // Configurar el transporte de nodemailer
+    const transporter = nodemailer.createTransport({
+      service: "gmail" || "Gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "padelcrown@gmail.com",
+        pass: process.env.PASS_GMAIL,
+      },
+    });
+
+    // Definir el contenido del correo electrónico
+    let mailOptions = {
+      from: "padelcrown@gmail.com",
+      to: cliente.email,
+      subject: "Compra realizada en Padel Crown",
+      html: replacedHTML,
+    };
+
+    // Enviar el correo electrónico
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        // Aquí no tienes acceso a `res` para responder con el estado HTTP, tendrías que manejar este caso de error de otra manera
+      } else {
+        console.log("Correo electrónico enviado: " + info.response);
+        // Aquí tampoco tienes acceso a `res` para responder con el estado HTTP
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    // Manejar el error si falla la lectura del archivo HTML
   }
 };
 
@@ -91,6 +147,27 @@ const deleteClientPermanently = async (req, res) => {
   }
 };
 
+const deleteAllClientPermanently = async (req, res) => {
+  try {
+    const clients = await Client.find();
+    const clientsThatDeleted = clients.filter(
+      (client) => client.eliminado === true
+    );
+
+    if (clientsThatDeleted.length === 0) {
+      return res.status(204).json({ message: "No hay clientes para eliminar" });
+    } else {
+      clientsThatDeleted.forEach(async (client) => {
+        await Client.findByIdAndDelete(client._id);
+      });
+
+      res.status(200).json({ message: "Clientes eliminados correctamente" });
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 const editClient = async (req, res) => {
   const { id } = req.params;
   const body = req.body;
@@ -132,33 +209,6 @@ const getClientsEliminados = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
-
-/* const guardarClienteELiminado = async (client) => {
-  const cliente = await Client.findById(client)
-  const eliminado =  new Eliminado({
-    nombre: cliente.nombre,
-    producto: cliente.producto,
-    apellido: cliente.apellido,
-    telefono: cliente.telefono,
-    direccion: cliente.direccion,
-    localidad: cliente.localidad,
-    provincia: cliente.provincia,
-    precio: cliente.precio,
-    costo: cliente.costo,
-    ganancia: cliente.ganancia,
-    formaPago: cliente.formaPago,
-    comentarios: cliente.comentarios,
-    linkSeguimiento: cliente.linkSeguimiento,
-    estado: cliente.estado,
-    estadoPedido: cliente.estadoPedido,
-  });
-  try {
-    await eliminado.save();
-  } catch (error) {
-    console.log(error);
-  }
-
-} */
 
 const updateEstadoPedido = async (req, res) => {
   const { id } = req.params;
@@ -233,4 +283,5 @@ module.exports = {
   addStateEliminado,
   restoreClient,
   deleteClientPermanently,
+  deleteAllClientPermanently,
 };
