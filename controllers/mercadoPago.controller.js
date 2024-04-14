@@ -53,7 +53,8 @@ const createPayment = async (req, res) => {
           failure: "http://localhost:3000/payment/failure",
           pending: "http://localhost:3000/payment/pending",
         },
-        auto_return: "all",
+        auto_return: "approved",
+
       },
       {
         headers: {
