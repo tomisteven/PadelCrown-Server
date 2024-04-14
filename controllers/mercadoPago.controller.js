@@ -20,7 +20,7 @@ const validarRifas = (rifasSeleccionadasParaComprar, rifasYaVendidas) => {
 const createPayment = async (req, res) => {
   const { precio, nombre, telefono, rifas, dni, email } = req.body;
   const url = "https://api.mercadopago.com/checkout/preferences";
-  const urlServer = "https://particular-bernita-digitalcode.koyeb.app ";
+  const urlServer = "https://particular-bernita-digitalcode.koyeb.app";
 
   const user = await Rifa.findById("661b77e9f1f1a203e3a23803");
   const rifasAsignadas = user.rifa.filter((rifa) => rifa.estado === true);
