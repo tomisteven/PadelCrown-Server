@@ -3,6 +3,8 @@ const productsRoutes = require("./routes/products.router");
 const revendedoresRoutes = require("./routes/revendedores.router");
 const clientsRoutes = require("./routes/clients.router");
 const seguimientoRoutes = require("./routes/seguimiento.router");
+const rifa = require("./routes/rifa.router");
+const mercadoPago = require("./routes/mercadoPago.router");
 var cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -30,5 +32,8 @@ app.use(`/`, productsRoutes); //rutas de usuario
 app.use(`/revendedores`, revendedoresRoutes); //rutas de usuario
 app.use("/admin/clientes", clientsRoutes); //rutas de usuario
 app.use("/seguimiento", seguimientoRoutes)
+app.use("/rifa", rifa);
+ app.use("/payment", mercadoPago);
+
 
 module.exports = app;
