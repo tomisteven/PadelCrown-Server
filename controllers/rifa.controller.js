@@ -76,7 +76,7 @@ const getRifas = async (req, res) => {
   res.status(200).json(rifas);
 };
 
-const editRifa = async (req, res) => {
+/* const editRifa = async (req, res) => {
   const { rifa_id } = req.params;
 
   const user = await Rifa.findById("661b77e9f1f1a203e3a23803");
@@ -88,7 +88,7 @@ const editRifa = async (req, res) => {
 
   await user.save();
   res.status(200).json(user);
-}
+} */
 
 
 const deleteAllRifas = async (req, res) => {
