@@ -76,6 +76,21 @@ const getRifas = async (req, res) => {
   res.status(200).json(rifas);
 };
 
+const editRifa = async (req, res) => {
+  const { rifa_id } = req.params;
+
+  const user = await Rifa.findById("661b77e9f1f1a203e3a23803");
+  const rifaEditable = user.rifa.find((rifa) => rifa._id == rifa_id);
+
+   Object.keys(req.body).forEach((key) => {
+    rifaEditable[key] = req.body[key];
+  });
+
+  await user.save();
+  res.status(200).json(user);
+}
+
+
 const deleteAllRifas = async (req, res) => {
   /* const { user_id } = req.user; */
   const user = await Rifa.findById("661b77e9f1f1a203e3a23803");
@@ -94,4 +109,5 @@ module.exports = {
   deleteAllRifas,
   asignarRifa,
   getRifas,
+  editRifa,
 };

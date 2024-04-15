@@ -16,7 +16,6 @@ const validarRifas = (rifasSeleccionadasParaComprar, rifasYaVendidas) => {
   return true;
 };
 
-
 const createPayment = async (req, res) => {
   const { precio, nombre, telefono, rifas, dni, email } = req.body;
   const url = "https://api.mercadopago.com/checkout/preferences";
@@ -34,8 +33,7 @@ const createPayment = async (req, res) => {
       error: "Algunas de las rifas seleccionadas ya fueron asignadas.",
       ok: false,
     });
-  }else{
-
+  } else {
     const pay = await axios.post(
       url,
       {
@@ -51,10 +49,9 @@ const createPayment = async (req, res) => {
         back_urls: {
           success: `${urlServer}/rifa/asignar?nombre=${nombre}&telefono=${telefono}&rifas=${rifas}&dni=${dni}&precio=${precio}&email=${email}`,
           failure: "http://localhost:3000/payment/failure",
-          pending: "http://localhost:3000/payment/pending",
+          pending: "https://particular-bernita-digitalcode.koyeb.app/payment/pending",
         },
         auto_return: "approved",
-
       },
       {
         headers: {
@@ -72,11 +69,6 @@ const createPayment = async (req, res) => {
   }
 };
 
-/* const getPayment = async (req, res) => {
-  const url = "https://api.mercadopago.com/v1/payments/" + req.query.payment_id;
-
-  res.send("obteniendo pago");
-}; */
 
 const failurePay = async (req, res) => {
   res.send("pago fallido, intente de nuevo");
@@ -84,6 +76,6 @@ const failurePay = async (req, res) => {
 
 module.exports = {
   createPayment,
-/*   getPayment, */
+  /*   getPayment, */
   failurePay,
 };
