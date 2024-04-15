@@ -109,5 +109,5 @@ module.exports = {
   deleteAllRifas,
   asignarRifa,
   getRifas,
-  editRifa,
+ /*  editRifa, */
 };
