@@ -34,8 +34,8 @@ const asignarRifa = async (req, res) => {
 
   const user = await Rifa.findById("661b77e9f1f1a203e3a23803");
 
-  const codigoIdentificacionRifa = nombre.substring(0, 2) + dni.substring(0, 3) + telefono.substring(0, 3);
-
+  const codigoIdentificacionRifa =
+    nombre.substring(0, 2) + dni.substring(0, 3) + telefono.substring(0, 3);
 
   //solo las rifas que no han sido asignadas
   try {
@@ -56,7 +56,9 @@ const asignarRifa = async (req, res) => {
     });
 
     await user.save();
-    res.redirect("http://padelcrown.store/rifas?ok=true&codigo=" + codigoIdentificacionRifa);
+    res.redirect(
+      "http://padelcrown.store/rifas?ok=true&codigo=" + codigoIdentificacionRifa
+    );
   } catch (error) {
     res.json({ mensaje: "error al asignar rifas", error, ok: false });
   }
@@ -76,7 +78,7 @@ const getRifas = async (req, res) => {
   res.status(200).json(rifas);
 };
 
-/* const editRifa = async (req, res) => {
+ const editRifa = async (req, res) => {
   const { rifa_id } = req.params;
 
   const user = await Rifa.findById("661b77e9f1f1a203e3a23803");
@@ -88,8 +90,16 @@ const getRifas = async (req, res) => {
 
   await user.save();
   res.status(200).json(user);
-} */
+}
 
+const getRifa = async (req, res) => {
+  const { rifa_id } = req.params;
+
+  const user = await Rifa.findById("661b77e9f1f1a203e3a23803");
+  const rifa = user.rifa.find((rifa) => rifa._id == rifa_id);
+
+  res.status(200).json(rifa);
+};
 
 const deleteAllRifas = async (req, res) => {
   /* const { user_id } = req.user; */
@@ -109,5 +119,6 @@ module.exports = {
   deleteAllRifas,
   asignarRifa,
   getRifas,
- /*  editRifa, */
+ editRifa,
+  getRifa,
 };

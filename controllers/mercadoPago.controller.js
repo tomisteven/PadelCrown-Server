@@ -1,5 +1,7 @@
 const axios = require("axios");
 const Rifa = require("../models/Rifa");
+/* import { MercadoPagoConfig, Payment } from "mercadopago"; */
+const { MercadoPagoConfig, Payment, Preference } = require("mercadopago");
 
 const validarRifas = (rifasSeleccionadasParaComprar, rifasYaVendidas) => {
   // Iterar sobre las rifas seleccionadas para comprar
@@ -49,7 +51,8 @@ const createPayment = async (req, res) => {
         back_urls: {
           success: `${urlServer}/rifa/asignar?nombre=${nombre}&telefono=${telefono}&rifas=${rifas}&dni=${dni}&precio=${precio}&email=${email}`,
           failure: "http://localhost:3000/payment/failure",
-          pending: "https://particular-bernita-digitalcode.koyeb.app/payment/pending",
+          pending:
+            "https://particular-bernita-digitalcode.koyeb.app/payment/pending",
         },
         auto_return: "approved",
       },
@@ -69,6 +72,45 @@ const createPayment = async (req, res) => {
   }
 };
 
+const createPayment2 = async (req, res) => {
+  // Step 2: Initialize the client object
+  const client = new MercadoPagoConfig({
+    accessToken: process.env.ACCESS_TOKEN,
+    options: {
+      sandbox: true,
+      timeout: 1000,
+    },
+  });
+  const preference = new Preference(client);
+
+  // Step 3: Create a preference
+  const preferenceData = {
+    items: [
+      {
+        id: "rifas23423",
+        title: "Rifa By Padelcrown",
+        unit_price: 1,
+        quantity: 1,
+      },
+    ],
+    back_urls: {
+      success:
+        "https://particular-bernita-digitalcode.koyeb.app/payment/success",
+      failure:
+        "https://particular-bernita-digitalcode.koyeb.app/payment/failure",
+      pending:
+        "https://particular-bernita-digitalcode.koyeb.app/payment/pending",
+    },
+    auto_return: "approved",
+  };
+
+  try {
+    const createdPreference = await preference.create({ body: preferenceData });
+    res.json(createdPreference.init_point);
+  } catch (error) {
+    console.error("Error creating preference:", error);
+  }
+};
 
 const failurePay = async (req, res) => {
   res.send("pago fallido, intente de nuevo");
@@ -77,5 +119,6 @@ const failurePay = async (req, res) => {
 module.exports = {
   createPayment,
   /*   getPayment, */
+  createPayment2,
   failurePay,
 };
