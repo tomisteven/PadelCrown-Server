@@ -4,8 +4,10 @@ const findClient = async (req, res) => {
   const { dni } = req.params;
 
   try {
-    const clients = await Client.find({ dni: dni });
-    res.status(200).json({estado : clients[0].estadoPedido, cliente:  clients[0].nombre, fecha: clients[0].fechaCompra, pedido : clients[0].producto, link: clients[0].linkSeguimiento})
+    const clients = await Client.find({ dni: dni, eliminado: false });
+    console.log(clients);
+    /* res.status(200).json({estado : clients[0].estadoPedido, cliente:  clients[0].nombre, fecha: clients[0].fechaCompra, pedido : clients[0].producto, link: clients[0].linkSeguimiento}) */
+    res.status(200).json(clients);
   } catch (error) {
     res.status(404).json({ message: "No se encontro a ninguna persona con ese DNI." });
   }
