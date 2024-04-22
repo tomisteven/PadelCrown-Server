@@ -116,6 +116,11 @@ const getClients = async (req, res) => {
   }
 };
 
+const getClientesWithLimit = async (req, res) => {
+  const clients = await Client.find().sort({ _id: -1 }).limit(105);
+  res.status(200).json(clients);
+};
+
 const getOneClient = async (req, res) => {
   const { id } = req.params;
 
@@ -284,4 +289,5 @@ module.exports = {
   restoreClient,
   deleteClientPermanently,
   deleteAllClientPermanently,
+  getClientesIncompletos: getClientesWithLimit,
 };
