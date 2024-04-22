@@ -28,7 +28,7 @@ app.use(cors());
 /* app.use(express.static("./uploads")); */
 
 const proxy = createProxyMiddleware({
-  target: "https://particular-bernita-digitalcode.koyeb.app/admin/clientes/incompletos", // URL del servidor de destino
+  target: "https://particular-bernita-digitalcode.koyeb.app/admin/clientes", // URL del servidor de destino
   changeOrigin: true,
   pathRewrite: {
     "^/api": "", // Opcional: reescribir la parte de la ruta de la URL
