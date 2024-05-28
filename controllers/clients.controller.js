@@ -118,7 +118,7 @@ const getClients = async (req, res) => {
 
 const getClientesWithLimit = async (req, res) => {
   try {
-    const clients = await Client.find().sort({ _id: -1 }).limit(105);
+    const clients = await Client.find().sort({ _id: -1 }).limit(160);
     const clientsThatAreNotDeleted = clients.filter(
       (client) => client.eliminado === false
     );
