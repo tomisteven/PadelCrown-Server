@@ -12,9 +12,9 @@ const ProductSchema = new Schema({
   },
   description: [
     {
-        type: String,
-        required: true,
-    }
+      type: String,
+      required: true,
+    },
   ],
   image: {
     type: String,
@@ -26,34 +26,34 @@ const ProductSchema = new Schema({
   },
   formato: [
     {
-        type: String,
-        required: true,
-        default: "Redonda",
-    }
+      type: String,
+      required: true,
+      default: "Redonda",
+    },
   ],
   nucleo: [
     {
-        type: String,
-        required: true,
-        default: "Foam",
-    }
-    ],
-    balance: [
-        {
-            type: String,
-            required: true,
-            default: "Medio",
-        }
-    ],
-    stock: {
-        type: Boolean,
-        default: true,
+      type: String,
+      required: true,
+      default: "Foam",
     },
+  ],
+  balance: [
+    {
+      type: String,
+      required: true,
+      default: "Medio",
+    },
+  ],
+  stock: {
+    type: Boolean,
+    default: true,
+  },
 
   url: {
     type: String,
     required: true,
-    default:"https://padelcrown.com.ar/"
+    default: "https://padelcrown.com.ar/",
   },
   cantidad: {
     type: Number,
@@ -64,14 +64,12 @@ const ProductSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  urlMl : String,
+  urlMl: String,
+  orden: {
+    type: Number,
+    default: 99,
+  },
 });
 
 const Product = mongoose.model("Product", ProductSchema);
 module.exports = Product;
-
-
-/* Paleta Full Carbono, Nucleo Foam/Soft, Paleta para jugadores Intermedios/Avanzados, Control con potencia, Peso de 360-375*/
-
-
-/*  "Mejora el Agarre, Evita Deslizamientos, Fórmula de Alto Rendimiento, Fácil de Aplicar, Duradera y Confiable" */

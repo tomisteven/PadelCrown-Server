@@ -29,6 +29,13 @@ const createProduct = async (req, res) => {
   res.status(201).json(productSaved);
 };
 
+const getCategories = async (req, res) => {
+  const products = await Products.find();
+  const categories = products.map((product) => product.category);
+  const uniqueCategories = [...new Set(categories)];
+  res.json(uniqueCategories);
+}
+
 const getProducts = async (req, res) => {
   const products = await Products.find();
   res.json(products);
@@ -72,4 +79,5 @@ module.exports = {
   editProduct,
   allStock,
   deleteProduct,
+  getCategories,
 };
