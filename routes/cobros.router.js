@@ -1,15 +1,26 @@
 const Router = require("express");
 const {
-  getClientesFinancieros,
-  createClienteFinanciero,
+
   getClienteFinancieroID,
+  crearNuevoPago,
+  getIntereses,
+  crearNuevaFinanciacion,
+  RegistrarNuevoCliente,
+
 } = require("../controllers/cobros.controller");
 
 const router = Router();
 
-router.get("/", getClientesFinancieros);
+router.get("/in/interes", getIntereses);
 router.get("/:id", getClienteFinancieroID);
 
-router.post("/nuevo", createClienteFinanciero);
+router.post("/cliente/login", RegistrarNuevoCliente);
+router.post("/nuevo-cliente", RegistrarNuevoCliente);
+router.post("/pago/:id_cliente/cuota/:id_cuota", crearNuevoPago);
+
+
+router.post("/nueva-financiacion/:id", crearNuevaFinanciacion);
+/* router.post("/generar-financiacion/:id", generarFinanciacionFinal); */
+
 
 module.exports = router;

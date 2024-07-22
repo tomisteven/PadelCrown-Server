@@ -45,7 +45,7 @@ const createPayment = async (req, res) => {
             unit_price: precio,
             quantity: 1,
             picture_url:
-              "https://padelcrown.store/static/media/LOGO%20ACTUAL.af177bacdace9bad462d.webp",
+              "https://padelcrown.site/static/media/LOGO%20ACTUAL.af177bacdace9bad462d.webp",
           },
         ],
         back_urls: {

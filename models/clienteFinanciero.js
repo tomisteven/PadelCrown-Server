@@ -9,15 +9,11 @@ const clienteFinancieroSchema = new Schema({
   email: String,
   dni: String,
   direccion: String,
+  provincia: String,
   cuotas: Number,
-  producto: [
-    {
-      nombre: String,
-      precio: Number,
-      cuotas: Number
-    }
-  ],
+  producto: String,
   tipoPago: String,
+  totalAbonado: Number,
   pagos: [
     {
       fecha: String,
@@ -27,6 +23,30 @@ const clienteFinancieroSchema = new Schema({
   ],
   fechaCreacion: String,
   pagando: Boolean,
+  cuotasAPagar: [
+    {
+      cuota: Number,
+      valor: Number,
+      fechaPago: Number,
+      pagada: Boolean,
+      confirmacion: String
+    },
+  ],
+  financiacion: [
+    {
+      tipo: String,
+      producto: String,
+      interes: Number,
+      cuotas: [
+        {
+          cuota: Number,
+          valor: Number,
+          pagada: Boolean,
+          fechaPago: String,
+        },
+      ],
+    },
+  ],
 });
 
 const ClienteFinanciero = mongoose.model(

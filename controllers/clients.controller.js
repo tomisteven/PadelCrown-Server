@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 const fs = require("fs");
 
 const createClient = async (req, res) => {
-  console.log(req.body);
+  //console.log(req.body);
   const client = req.body;
   const email = client.email;
   const ganancia =
@@ -229,10 +229,10 @@ const updateEstadoPedido = async (req, res) => {
   if (!user) return res.status(204).json();
 
   user.estado = estado;
-  console.log({ estado: estado, fecha: fecha });
+  //console.log({ estado: estado, fecha: fecha });
   user.estadoPedido.push({ estado: estado, fecha: fecha });
   await user.save();
-  console.log(user.estadoPedido);
+  //console.log(user.estadoPedido);
   res.json(user);
 };
 

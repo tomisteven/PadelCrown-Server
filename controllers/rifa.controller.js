@@ -57,12 +57,13 @@ const asignarRifa = async (req, res) => {
 
     await user.save();
     res.redirect(
-      "http://padelcrown.store/rifas?ok=true&codigo=" + codigoIdentificacionRifa
+      "http://padelcrown.site/rifas?ok=true&codigo=" + codigoIdentificacionRifa
     );
   } catch (error) {
     res.json({ mensaje: "error al asignar rifas", error, ok: false });
   }
 };
+
 
 const getRifas = async (req, res) => {
   const { estado } = req.query;

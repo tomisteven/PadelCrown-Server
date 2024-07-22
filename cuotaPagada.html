@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compra realizada en Padel Crown 🚀</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #dddddd;
+      }
+      th {
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h4> 👋 Hola {{ cliente.nombre }} 🌟 </h4>
+      <h1>Gracias por pagar en Cuotas a PadelCrown 🚀🚀</h1>
+      <h4>
+        Te recordamos que nuestras paletas tienen una demora de fabricación de 7
+        a 15 días HÁBILES una vez realizado el pago del 50% del producto.
+      </h4>
+      <h3>
+        CUOTA PAGADA: {{ cliente.cuota }} de {{ cliente.cuotasTotales }}
+
+      </h3>
+      <table>
+        <tr>
+          <th>🌟  DNI:</th>
+          <td>{{ cliente.dni }}</td>
+        </tr>
+          <th>🌟 Producto:</th>
+          <td>{{ cliente.producto }}</td>
+        </tr>
+        <tr>
+          <th>🌟  Precio Total:</th>
+          <td>{{ cliente.precio }}</td>
+        <tr>
+          <tr>
+            <th>🌟 Direccion:</th>
+            <td>{{ cliente.direccion }}</td>
+          </tr>
+          <th>🌟 Provincia:</th>
+          <td>{{ cliente.provincia }}</td>
+        </tr>
+      </table>
+      <h5>
+        Te vamos a enviar un mensaje con el link de seguimiento de Andreani
+        cuando sea despachado! 🔗
+      </h5>
+      <br />
+      <h5>
+        Podes seguir la fabricacion de tu pedido desde el siguiente link 🔗:
+
+        <a href="https://padelcrown.store/seguimiento"
+          >LINK SEGUIMIENTO DE FABRICACION</a
+        >
+        - Podras verlo Ingresando tu DNI: {{ cliente.dni2 }}
+        - Tene en cuenta que puede demorar hasta 2 horas habiles en aparecer en
+        el seguimiento. Saludos, Padel Crown * * * Si no hiciste esta compra o
+        simplemente estabas probando nuestro sitio, por favor desconsiderá este
+        e-mail.
+      </h5>
+    </div>
+  </body>
+</html>

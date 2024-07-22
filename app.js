@@ -1,6 +1,7 @@
 const express = require("express");
 const productsRoutes = require("./routes/products.router");
-const cobrosRoutes = require("./routes/cobros.router.js");
+/*  const cobrosAdminRoutes = require("./routes/cobrosAdmin.router.js");
+const cobrosRoutes = require("./routes/cobros.router.js"); */
 const revendedoresRoutes = require("./routes/revendedores.router");
 const clientsRoutes = require("./routes/clients.router");
 const seguimientoRoutes = require("./routes/seguimiento.router");
@@ -47,6 +48,6 @@ app.use("/admin/clientes", clientsRoutes); //rutas de usuario
 app.use("/seguimiento", seguimientoRoutes);
 app.use("/rifa", rifa);
 app.use("/payment", mercadoPago);
-app.use("/cobros", cobrosRoutes);
-
+/* app.use("/cobros", cobrosRoutes);
+app.use("/admin/cobros", cobrosAdminRoutes); */
 module.exports = app;
