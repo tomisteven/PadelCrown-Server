@@ -2,6 +2,24 @@ const ClienteFinanciero = require("../models/clienteFinanciero.js");
 const Interes = require("../models/modeloInteres.js");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
+const { log } = require("console");
+
+const loginCliente = async (req, res) => {
+  const { username, password } = req.body;
+
+  const cliente = await ClienteFinanciero.findOne({
+    username: username,
+    password: password,
+  });
+
+  if (cliente) {
+    res.json(cliente);
+  } else {
+    res
+      .status(400)
+      .json({ message: "Usuario o contraseña incorrectos", ok: false });
+  }
+};
 
 const RegistrarNuevoCliente = async (req, res) => {
   const client = req.body;
@@ -11,7 +29,11 @@ const RegistrarNuevoCliente = async (req, res) => {
     fecha.getMonth() + 1
   }/${fecha.getFullYear()}`;
 
-  if (await validarRepetidos(client)) {
+  const clienteExiste = await ClienteFinanciero.findOne({
+    username: client.username,
+  });
+
+  if (clienteExiste === null) {
     const newCliente = new ClienteFinanciero(client);
     try {
       await newCliente.save();
@@ -22,6 +44,18 @@ const RegistrarNuevoCliente = async (req, res) => {
   } else {
     res.status(400).json({ message: "El usuario ya existe" });
   }
+};
+
+const eliminarCliente = async (req, res) => {
+  const { id } = req.params;
+  const cliente = await ClienteFinanciero.findById(id);
+
+  if (!cliente) {
+    return res.status(400).json({ message: "Cliente no encontrado" });
+  }
+
+  await ClienteFinanciero.findByIdAndDelete(id);
+  res.json({ message: "Cliente eliminado" });
 };
 
 const getIntereses = async (req, res) => {
@@ -35,6 +69,7 @@ const getIntereses = async (req, res) => {
 
 const crearNuevoPago = async (req, res) => {
   const { id_cliente, id_cuota } = req.params;
+  const { producto } = req.body;
 
   //console.log(id_cliente, id_cuota);
 
@@ -46,21 +81,34 @@ const crearNuevoPago = async (req, res) => {
 
   const cuota = cliente.cuotasAPagar.find((i) => i._id == id_cuota);
 
-  if (!cuota) {
-    return res.status(400).json({ message: "Cuota no encontrada" });
+  if (!cuota || !producto) {
+    return res.status(400).json({
+      message:
+        "Cuota no encontrada o producto sin especificar, revise nuevamente",
+    });
   }
 
   if (!cuota.pagada) {
     cuota.pagada = true;
     cuota.confirmacion = "Pendiente";
-    const cuotaPAGA = cuota.cuota;
+
     const precio = cuota.valor;
-    cliente.pagos.push({ cuota: cuotaPAGA, monto: precio, fecha: new Date() });
+    cliente.pagos.push({
+      cuota: cuota.cuota,
+      monto: precio,
+      fecha: new Date(),
+    });
+    cliente.historial.push({
+      cuota: cuota.cuota,
+      monto: precio,
+      fecha: new Date(),
+      producto: producto,
+    });
     await cliente.save().then(() => {
-      sendEmail(cliente, cuotaPAGA, precio);
+      sendEmail(cliente, cuota.cuota, precio);
     });
   } else {
-    return res.status(400).json({ message: "Cuota ya pagada" });
+    return res.status(400).json({ message: "Cuota ya pagada", ok: false });
   }
 
   return res.json({
@@ -195,9 +243,27 @@ const crearNuevaFinanciacion = async (req, res) => {
   }
 };
 
+const eliminarFinanciacion = async (req, res) => {
+  const { id } = req.params;
+
+  const cliente = await ClienteFinanciero.findById(id);
+
+  if (!cliente) {
+    return res.status(400).json({ message: "Cliente no encontrado" });
+  }
+
+  cliente.financiacion = [];
+  cliente.cuotasAPagar = [];
+  cliente.pagando = false;
+  cliente.pagos = [];
+
+  await cliente.save();
+  res.json({ cliente, ok: true });
+};
+
 const validarRepetidos = async (client) => {
   const cliente = await ClienteFinanciero.findOne({
-    userName: client.userName,
+    username: client.username,
   });
   if (cliente) {
     return false;
@@ -264,4 +330,7 @@ module.exports = {
   getIntereses,
   crearNuevaFinanciacion,
   RegistrarNuevoCliente,
+  eliminarCliente,
+  eliminarFinanciacion,
+  loginCliente,
 };

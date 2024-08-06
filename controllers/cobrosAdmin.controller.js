@@ -57,6 +57,30 @@ const crearInteres = async (req, res) => {
   }
 };
 
+const eliminarRegistrosCliente = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const cliente = await ClienteFinanciero.findById(id);
+
+    if (!cliente) {
+      return res.status(400).json({ message: "Cliente no encontrado" });
+    }
+    cliente.pagos = [];
+    cliente.pagando = false;
+    cliente.cuotasAPagar = [];
+    cliente.financiacion = [];
+    cliente.totalAbonado = 0;
+    cliente.cuotas = 0;
+    cliente.producto = "";
+
+    await cliente.save();
+    res.json({ message: "Registros eliminados", ok: true });
+  } catch (error) {
+    res.status(500).json({ message: error.message, ok: false });
+  }
+};
+
 const validarRepetidos = async (client) => {
   const cliente = await ClienteFinanciero.findOne({
     userName: client.userName,
@@ -73,4 +97,5 @@ module.exports = {
   crearInteres,
   getClientesFinancieros,
   verificarPago,
+  eliminarRegistrosCliente
 };

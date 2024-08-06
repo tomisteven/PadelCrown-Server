@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const clienteFinancieroSchema = new Schema({
-  userName: String,
+  username: String,
   password: String,
   nombre: String,
   telefono: String,
@@ -21,6 +21,14 @@ const clienteFinancieroSchema = new Schema({
       cuota: Number,
     },
   ],
+  historial: [
+    {
+      fecha: String,
+      monto: Number,
+      cuota: Number,
+      producto: String,
+    },
+  ],
   fechaCreacion: String,
   pagando: Boolean,
   cuotasAPagar: [
@@ -29,7 +37,7 @@ const clienteFinancieroSchema = new Schema({
       valor: Number,
       fechaPago: Number,
       pagada: Boolean,
-      confirmacion: String
+      confirmacion: String,
     },
   ],
   financiacion: [
