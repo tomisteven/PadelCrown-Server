@@ -81,6 +81,14 @@ const eliminarRegistrosCliente = async (req, res) => {
   }
 };
 
+const confirmarFinanciacionA = async (req, res) => {
+  const { id } = req.params;
+
+  const client = await ClienteFinanciero.findById(id);
+  client.confirmadoPorAdministracion = true;
+  await client.save();
+};
+
 const validarRepetidos = async (client) => {
   const cliente = await ClienteFinanciero.findOne({
     userName: client.userName,
@@ -97,5 +105,6 @@ module.exports = {
   crearInteres,
   getClientesFinancieros,
   verificarPago,
-  eliminarRegistrosCliente
+  eliminarRegistrosCliente,
+  confirmarFinanciacionA
 };

@@ -32,6 +32,7 @@ const RegistrarNuevoCliente = async (req, res) => {
   const clienteExiste = await ClienteFinanciero.findOne({
     username: client.username,
   });
+  client.confirmadoPorAdministracion = false;
 
   if (clienteExiste === null) {
     const newCliente = new ClienteFinanciero(client);
@@ -243,6 +244,137 @@ const crearNuevaFinanciacion = async (req, res) => {
   }
 };
 
+const crearNuevaFinanciacion2 = async (req, res) => {
+  const { precio, producto, confirmacion, tipo } = req.body;
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: "Falta el ID del cliente" });
+  }
+
+  const cliente = await ClienteFinanciero.findById(id);
+
+  if (!cliente) {
+    return res.status(400).json({ message: "Cliente no encontrado" });
+  }
+
+  const intereses = await Interes.find();
+
+  function calcularFechas(tipo) {
+    let intervaloDias = 0;
+    let cantidadDePeriodos = 0;
+    if (tipo === "Semanal") {
+      intervaloDias = 7;
+      cantidadDePeriodos = 4;
+    } else if (tipo === "Quincenal") {
+      intervaloDias = 15;
+      cantidadDePeriodos = 3;
+    } else if (tipo === "Mensual") {
+      intervaloDias = 30;
+      cantidadDePeriodos = 2;
+    }
+
+    const fechas = [];
+    const hoy = new Date();
+
+    for (let i = 0; i < cantidadDePeriodos; i++) {
+      const nuevaFecha = new Date(hoy);
+      nuevaFecha.setDate(hoy.getDate() + i * intervaloDias);
+      fechas.push(nuevaFecha.toLocaleDateString());
+    }
+
+    //console.log(fechas);
+    return fechas;
+  }
+
+  const arrayCuotas = (precio, cuotas, interes, tipo) => {
+    const arr = [];
+    for (let i = 1; i <= cuotas; i++) {
+      arr.push({
+        cuota: i,
+        valor: Math.round(
+          precio / cuotas + (precio / cuotas) * interes.interes
+        ),
+        fechaPago: calcularFechas(tipo)[i - 1],
+      });
+    }
+    return arr;
+  };
+
+  const opciones = [
+    {
+      tipo: "Semanal",
+      producto: producto,
+      interes: intereses[0].interes,
+      cuotas: arrayCuotas(precio, 4, intereses[0], "Semanal"),
+    },
+    {
+      tipo: "Quincenal",
+      producto: producto,
+      interes: intereses[1].interes,
+      cuotas: arrayCuotas(precio, 3, intereses[1], "Quincenal"),
+    },
+    {
+      tipo: "Mensual",
+      producto: producto,
+      interes: intereses[2].interes,
+      cuotas: arrayCuotas(precio, 2, intereses[2], "Mensual"),
+    },
+  ];
+
+  if (confirmacion) {
+    cliente.producto = producto + " " + precio;
+    switch (tipo) {
+      case "Semanal":
+        cliente.cuotas = 4;
+        break;
+      case "Quincenal":
+        cliente.cuotas = 3;
+        break;
+      case "Mensual":
+        cliente.cuotas = 2;
+        break;
+      default:
+        break;
+    }
+    // Seleccionar la opción de financiación según el tipo seleccionado por el cliente (semanal, quincenal, mensual)
+    const opcionSeleccionada = opciones.find((opcion) => opcion.tipo === tipo);
+    // Validar que el tipo de financiación seleccionado sea válido
+    if (!opcionSeleccionada) {
+      return res
+        .status(400)
+        .json({ message: "Tipo de financiación no válido" });
+    }
+
+    // Validar que el cliente no tenga una financiación activa
+    if (cliente.financiacion.length == 1) {
+      return res
+        .status(400)
+        .json({ message: "Ya tiene una financiación activa" });
+    }
+
+    // Agregar la financiación al cliente y las cuotas a pagar
+
+    cliente.financiacion.push(opcionSeleccionada);
+    opcionSeleccionada.cuotas.map((i, n) => {
+      cliente.cuotasAPagar.push({
+        cuota: i.cuota,
+        valor: i.valor,
+        pagada: false,
+        fechaPago: calcularFechas(tipo)[i.cuota - 1],
+      });
+    });
+
+    // Marcar al cliente como pagando
+    cliente.pagando = true;
+
+    await cliente.save();
+    return res.json({ cliente, ok: true });
+  } else {
+    return res.json(opciones);
+  }
+};
+
 const eliminarFinanciacion = async (req, res) => {
   const { id } = req.params;
 
@@ -329,8 +461,26 @@ module.exports = {
   crearNuevoPago,
   getIntereses,
   crearNuevaFinanciacion,
+  crearNuevaFinanciacion2,
   RegistrarNuevoCliente,
   eliminarCliente,
   eliminarFinanciacion,
   loginCliente,
 };
+
+/* function calcularFechasCada15Dias(cantidadDePeriodos) {
+      const fechas = [];
+      const hoy = new Date();
+
+      for (let i = 0; i < cantidadDePeriodos; i++) {
+          const nuevaFecha = new Date(hoy);
+          nuevaFecha.setDate(hoy.getDate() + i * 15);
+          fechas.push(nuevaFecha.toLocaleDateString());
+      }
+
+      return fechas;
+  }
+
+  // Ejemplo de uso: calcular las próximas 10 fechas cada 15 días
+  const proximasFechas = calcularFechasCada15Dias(10);
+  console.log(proximasFechas); */

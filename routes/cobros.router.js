@@ -5,10 +5,12 @@ const {
   crearNuevoPago,
   getIntereses,
   crearNuevaFinanciacion,
+  crearNuevaFinanciacion2,
   RegistrarNuevoCliente,
   eliminarCliente,
   eliminarFinanciacion,
-  loginCliente
+  loginCliente,
+
 
 } = require("../controllers/cobros.controller");
 
@@ -26,7 +28,7 @@ router.get("/eliminar/financiacion/:id", eliminarFinanciacion);
 router.delete("/cliente/eliminar/:id", eliminarCliente);
 
 
-router.post("/nueva-financiacion/:id", crearNuevaFinanciacion);
+router.post("/nueva-financiacion/:id", crearNuevaFinanciacion2);
 /* router.post("/generar-financiacion/:id", generarFinanciacionFinal); */
 
 

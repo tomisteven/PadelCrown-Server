@@ -13,7 +13,15 @@ const clienteFinancieroSchema = new Schema({
   cuotas: Number,
   producto: String,
   tipoPago: String,
+  estadoActual: {
+    type: Boolean,
+    default: false,
+  },
   totalAbonado: Number,
+  confirmadoPorAdministracion: {
+    type: Boolean,
+    default: false,
+  },
   pagos: [
     {
       fecha: String,
@@ -35,12 +43,27 @@ const clienteFinancieroSchema = new Schema({
     {
       cuota: Number,
       valor: Number,
-      fechaPago: Number,
+      fechaPago: String,
       pagada: Boolean,
-      confirmacion: String,
     },
   ],
   financiacion: [
+    {
+      tipo: String,
+      estado: String,
+      producto: String,
+      interes: Number,
+      cuotas: [
+        {
+          cuota: Number,
+          valor: Number,
+          pagada: Boolean,
+          fechaPago: String,
+        },
+      ],
+    },
+  ],
+  historialFinanciacion: [
     {
       tipo: String,
       producto: String,
