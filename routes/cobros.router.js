@@ -10,6 +10,7 @@ const {
   eliminarCliente,
   eliminarFinanciacion,
   loginCliente,
+  editarCliente
 
 
 } = require("../controllers/cobros.controller");
@@ -27,6 +28,8 @@ router.get("/eliminar/financiacion/:id", eliminarFinanciacion);
 
 router.delete("/cliente/eliminar/:id", eliminarCliente);
 
+
+router.patch("/editar/:id", editarCliente);
 
 router.post("/nueva-financiacion/:id", crearNuevaFinanciacion2);
 /* router.post("/generar-financiacion/:id", generarFinanciacionFinal); */

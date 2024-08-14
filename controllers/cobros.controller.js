@@ -3,6 +3,7 @@ const Interes = require("../models/modeloInteres.js");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const { log } = require("console");
+const object = require("@hapi/joi/lib/types/object.js");
 
 const loginCliente = async (req, res) => {
   const { username, password } = req.body;
@@ -324,6 +325,8 @@ const crearNuevaFinanciacion2 = async (req, res) => {
 
   if (confirmacion) {
     cliente.producto = producto + " " + precio;
+    cliente.tipoPago = tipo;
+    cliente.estadoActual = true;
     switch (tipo) {
       case "Semanal":
         cliente.cuotas = 4;
@@ -456,6 +459,27 @@ const sendEmail = async (cliente, cuotaPAGA, precio) => {
   }
 };
 
+const editarCliente = async (req, res) => {
+  const { id } = req.params;
+
+  const cliente = await ClienteFinanciero.findById(id);
+
+  if (!cliente) {
+    return res.status(400).json({ message: "Cliente no encontrado" });
+  }
+
+  console.log(req.body);
+  console.log(cliente);
+
+   Object.keys(req.body).forEach((key) => {
+    cliente[key] = req.body[key];
+  });
+
+  await cliente.save();
+
+  res.json({ cliente, ok: true });
+};
+
 module.exports = {
   getClienteFinancieroID,
   crearNuevoPago,
@@ -466,6 +490,7 @@ module.exports = {
   eliminarCliente,
   eliminarFinanciacion,
   loginCliente,
+  editarCliente,
 };
 
 /* function calcularFechasCada15Dias(cantidadDePeriodos) {
