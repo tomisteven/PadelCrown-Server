@@ -60,6 +60,10 @@ const clienteFinancieroSchema = new Schema({
           valor: Number,
           pagada: Boolean,
           fechaPago: String,
+          confirmacion: {
+            type: String,
+            default: "Sin Pagar",
+          },
         },
       ],
     },

@@ -468,8 +468,8 @@ const editarCliente = async (req, res) => {
     return res.status(400).json({ message: "Cliente no encontrado" });
   }
 
-  console.log(req.body);
-  console.log(cliente);
+  /* console.log(req.body);
+  console.log(cliente); */
 
    Object.keys(req.body).forEach((key) => {
     cliente[key] = req.body[key];
