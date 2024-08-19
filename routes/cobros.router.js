@@ -36,3 +36,6 @@ router.post("/nueva-financiacion/:id", crearNuevaFinanciacion2);
 
 
 module.exports = router;
+
+
+/*  crear funcion que avise por mail cuando un cliente completo todas las cuotas */
