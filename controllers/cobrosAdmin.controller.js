@@ -18,10 +18,10 @@ const verificarPago = async (req, res) => {
   const cuotaPaga = cliente.cuotasAPagar.find((i) => i._id == id_cuota);
 
   if (confirmacion === "Aprobado") {
-    cuotaPaga.confirmacion = "Aprobado";
+    cuotaPaga.estado = "Aprobado";
     cuotaPaga.pagada = true;
   } else {
-    cuotaPaga.confirmacion = "Rechazado";
+    cuotaPaga.estado = "Rechazado";
     cuotaPaga.pagada = false;
   }
   await cliente.save();

@@ -46,6 +46,7 @@ const clienteFinancieroSchema = new Schema({
       valor: Number,
       fechaPago: String,
       pagada: Boolean,
+      estado: String,
     },
   ],
   financiacion: [

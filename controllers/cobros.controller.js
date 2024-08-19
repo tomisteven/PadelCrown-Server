@@ -106,6 +106,7 @@ const crearNuevoPago = async (req, res) => {
       fecha: new Date(),
       producto: producto,
     });
+    cuota.estado = "Pendiente de Aprobación";
     await cliente.save().then(() => {
       sendEmail(cliente, cuota.cuota, precio);
     });
@@ -471,7 +472,7 @@ const editarCliente = async (req, res) => {
   /* console.log(req.body);
   console.log(cliente); */
 
-   Object.keys(req.body).forEach((key) => {
+  Object.keys(req.body).forEach((key) => {
     cliente[key] = req.body[key];
   });
 
