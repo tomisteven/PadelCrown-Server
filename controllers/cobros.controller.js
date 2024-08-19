@@ -91,7 +91,7 @@ const crearNuevoPago = async (req, res) => {
   }
 
   if (!cuota.pagada) {
-    cuota.pagada = true;
+    //cuota.pagada = true;
     cuota.confirmacion = "Pendiente";
 
     const precio = cuota.valor;

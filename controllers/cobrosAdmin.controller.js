@@ -73,6 +73,7 @@ const eliminarRegistrosCliente = async (req, res) => {
     cliente.totalAbonado = 0;
     cliente.cuotas = 0;
     cliente.producto = "";
+    cliente.estadoActual = false;
 
     await cliente.save();
     res.json({ message: "Registros eliminados", ok: true });
@@ -106,5 +107,5 @@ module.exports = {
   getClientesFinancieros,
   verificarPago,
   eliminarRegistrosCliente,
-  confirmarFinanciacionA
+  confirmarFinanciacionA,
 };
