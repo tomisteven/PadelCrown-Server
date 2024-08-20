@@ -33,13 +33,14 @@ const RegistrarNuevoCliente = async (req, res) => {
   const clienteExiste = await ClienteFinanciero.findOne({
     username: client.username,
   });
+
   client.confirmadoPorAdministracion = false;
 
   if (clienteExiste === null) {
     const newCliente = new ClienteFinanciero(client);
     try {
       await newCliente.save();
-      res.status(201).json(newCliente);
+      res.json(newCliente);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -493,20 +494,3 @@ module.exports = {
   loginCliente,
   editarCliente,
 };
-
-/* function calcularFechasCada15Dias(cantidadDePeriodos) {
-      const fechas = [];
-      const hoy = new Date();
-
-      for (let i = 0; i < cantidadDePeriodos; i++) {
-          const nuevaFecha = new Date(hoy);
-          nuevaFecha.setDate(hoy.getDate() + i * 15);
-          fechas.push(nuevaFecha.toLocaleDateString());
-      }
-
-      return fechas;
-  }
-
-  // Ejemplo de uso: calcular las próximas 10 fechas cada 15 días
-  const proximasFechas = calcularFechasCada15Dias(10);
-  console.log(proximasFechas); */
