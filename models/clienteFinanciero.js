@@ -46,10 +46,7 @@ const clienteFinancieroSchema = new Schema({
       valor: Number,
       fechaPago: String,
       pagada: Boolean,
-      estado: {
-        type: String,
-        default: "Notificar Pago",
-      }
+      estado: String,
     },
   ],
   financiacion: [
@@ -64,10 +61,7 @@ const clienteFinancieroSchema = new Schema({
           valor: Number,
           pagada: Boolean,
           fechaPago: String,
-          confirmacion: {
-            type: String,
-            default: "Sin Pagar",
-          },
+          confirmacion: String,
         },
       ],
     },
