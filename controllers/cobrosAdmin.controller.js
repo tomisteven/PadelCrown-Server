@@ -9,7 +9,6 @@ const getClientesFinancieros = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 const verificarPago = async (req, res) => {
   const { id_cliente, id_cuota } = req.params;
   const { confirmacion } = req.query;
