@@ -96,7 +96,7 @@ const crearNuevoPago = async (req, res) => {
     cuota.confirmacion = "Pendiente";
 
     const precio = cuota.valor;
-    cliente.pagos.push({
+    /* cliente.pagos.push({
       cuota: cuota.cuota,
       monto: precio,
       fecha: new Date(),
@@ -106,7 +106,7 @@ const crearNuevoPago = async (req, res) => {
       monto: precio,
       fecha: new Date(),
       producto: producto,
-    });
+    }); */
     cuota.estado = "Pendiente de Aprobación";
     await cliente.save().then(() => {
       sendEmail(cliente, cuota.cuota, precio);

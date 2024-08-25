@@ -9,6 +9,7 @@ const getClientesFinancieros = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 const verificarPago = async (req, res) => {
   const { id_cliente, id_cuota } = req.params;
   const { confirmacion } = req.query;
@@ -19,6 +20,20 @@ const verificarPago = async (req, res) => {
   if (confirmacion === "Aprobado") {
     cuotaPaga.estado = "Aprobado";
     cuotaPaga.pagada = true;
+
+    cliente.pagos.push({
+      fecha: cuotaPaga.fechaPago,
+      monto: cuotaPaga.valor,
+      cuota: cuotaPaga.cuota,
+    });
+
+    cliente.historial.push({
+      fecha: cuotaPaga.fechaPago,
+      monto: cuotaPaga.valor,
+      cuota: cuotaPaga.cuota,
+      producto: cliente.producto,
+    });
+
   } else {
     cuotaPaga.estado = "Rechazado";
     cuotaPaga.pagada = false;
